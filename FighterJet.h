@@ -11,6 +11,6 @@ public:
 	// this function moves the fighter jet aircraft. Movement is two to three spaces forward and left or right one space
 	virtual void move() override
 	{
-
+		
 	}
 };
