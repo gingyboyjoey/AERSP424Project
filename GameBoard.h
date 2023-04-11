@@ -69,9 +69,18 @@ public:
 	}
 
 	// this function updates the game board grid
-	void update_board()
-	{
-		
+	void updateAndPrintBoard(int x, int y) {
+		if (this->Board[y][x] == ' ') {
+			this->Board[y][x] = 'X';
+			std::cout << "Hit!" << std::endl;
+		}
+		else if (this->Board[y][x] == 'X') {
+			std::cout << "Already hit that spot!" << std::endl;
+		}
+		else {
+			std::cout << "Miss!" << std::endl;
+		}
+		print_board();
 	}
 
 private:
