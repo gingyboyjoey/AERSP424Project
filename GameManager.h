@@ -8,6 +8,7 @@
 #include "FighterJet.h"
 #include <cstdlib>
 #include <time.h>
+#include <string>
 
 using namespace std;
 // This class defines functions that will run the Game. This includes if the game has started or ended, and whose 
