@@ -11,6 +11,7 @@
 #include <string>
 
 using namespace std;
+
 // This class defines functions that will run the Game. This includes if the game has started or ended, and whose 
 // turn it is to make a move.
 class GameManager
@@ -18,8 +19,6 @@ class GameManager
 public:
 	GameManager() {}	// constructor
 	~GameManager() {}	// deconstructor
-
-    int hitCounter = 0; // holds the number of aircraft that have reached the base
 
 	// this function starts the game
 	static void start()
@@ -78,9 +77,82 @@ public:
                 system("clear"); // clear the terminal (Linux/MacOS)
         #endif
 
-        GameBoard board;
-        board.print_board();
 	}
+
+    // this function runs the game
+    static void runGame()
+    {
+        // Instantiate a GameBoard and GameManager object
+        GameBoard board;
+        GameManager M;
+        Aircraft* current_AC;
+
+        int hitCounter = 0; // holds the number of aircraft that have reached the base
+        int x, y; // intitialize player shot coordinates
+
+        while (!M.isOver(hitCounter))
+        {
+            board.print_board();
+
+            srand(time(0));
+            int AC_type = rand() % 2;
+
+            // spawn in a random aircraft type of either Bomber of FighterJet
+            if (AC_type == 0)
+            {
+                Bomber* B = new Bomber(); // spawn a Bomber object and get the pointer
+                current_AC = B;
+            }
+
+            else
+            {
+                FighterJet* F = new FighterJet(); // spawn a FighterJet object and get the pointer
+                current_AC = F;
+            }
+
+            while (!Aircraft::isDefeated(current_AC))
+            {
+                M.playerShot(x, y);
+                current_AC->move();
+                for (int i = 0; i < current_AC->location.size(); i++)
+                {
+                    if (current_AC->location[i].first == x && current_AC->location[i].second == y)
+                    {
+                        current_AC->labels[i] = 'X';
+                    }
+                }
+            }
+            
+            
+
+        }
+
+        
+    }
+
+    void playerShot(int& x, int& y) 
+    {
+        string input;
+        bool validInput = false;
+        while (!validInput) 
+        {
+            cout << "Enter the coordinates of your shot (e.g. A3): ";
+            cin >> input;
+            if (input.length() == 2 && isalpha(tolower(input[0])) && isdigit(input[1])) 
+            {
+                x = tolower(input[0]) - 'a'; // convert letter to corresponding index (0-15)
+                y = input[1] - '1'; // convert number to corresponding index (0-8)
+                if (x >= 0 && x < 16 && y >= 0 && y < 7) 
+                {
+                    validInput = true;
+                }
+            }
+            if (!validInput) 
+            {
+                cout << "Invalid input. Please enter a valid coordinate within the 16x9 grid." << endl;
+            }
+        }
+    }
 
 	// this function determines whether the game has ended or not
 	bool isOver(int Counter)
@@ -95,51 +167,14 @@ public:
         }
 	}
 
-	// this function spawns in a random new aircraft (STILL NEEDS WORK!!)
-	void spawn_AC()
-	{
-        srand(time(0));
-        int AC_type = rand() % 2;
-
-        if (AC_type == 0)
-        {
-            Bomber B;
-        }
-
-        else
-        {
-            FighterJet F;
-        }
-	}
-
-
-
     // this function adds up the score and prints the total score if the game has ended
-    void Score(int points)
+    void Score(int points, int hitCounter)
     {
         this->score = this->score + points;
 
         if (isOver(hitCounter))
         {
             cout << "FINAL SCORE: " << this->score;
-        }
-    }
-	 static void playerShot(int& x, int& y) {
-        std::string input;
-        bool validInput = false;
-        while (!validInput) {
-            std::cout << "Enter the coordinates of your shot (e.g. A3): ";
-            std::cin >> input;
-            if (input.length() == 2 && std::isalpha(std::tolower(input[0])) && std::isdigit(input[1])) {
-                x = std::tolower(input[0]) - 'a'; // convert letter to corresponding index (0-15)
-                y = input[1] - '1'; // convert number to corresponding index (0-8)
-                if (x >= 0 && x < 16 && y >= 0 && y < 7) {
-                    validInput = true;
-                }
-            }
-            if (!validInput) {
-                std::cout << "Invalid input. Please enter a valid coordinate within the 16x9 grid." << std::endl;
-            }
         }
     }
 

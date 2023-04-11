@@ -71,7 +71,7 @@ public:
 	// this function updates the game board grid
 	void update_board()
 	{
-
+		
 	}
 
 private:
