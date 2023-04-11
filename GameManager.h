@@ -123,6 +123,24 @@ public:
             cout << "FINAL SCORE: " << this->score;
         }
     }
+	 static void playerShot(int& x, int& y) {
+        std::string input;
+        bool validInput = false;
+        while (!validInput) {
+            std::cout << "Enter the coordinates of your shot (e.g. A3): ";
+            std::cin >> input;
+            if (input.length() == 2 && std::isalpha(std::tolower(input[0])) && std::isdigit(input[1])) {
+                x = std::tolower(input[0]) - 'a'; // convert letter to corresponding index (0-15)
+                y = input[1] - '1'; // convert number to corresponding index (0-8)
+                if (x >= 0 && x < 16 && y >= 0 && y < 7) {
+                    validInput = true;
+                }
+            }
+            if (!validInput) {
+                std::cout << "Invalid input. Please enter a valid coordinate within the 16x9 grid." << std::endl;
+            }
+        }
+    }
 
 private:
     int score = 0;
