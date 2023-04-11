@@ -85,6 +85,8 @@ public:
         // Instantiate a GameBoard and GameManager object
         GameBoard board;
         GameManager M;
+
+        // creates an pointer to an Aircraft object
         Aircraft* current_AC;
 
         int hitCounter = 0; // holds the number of aircraft that have reached the base
@@ -97,37 +99,74 @@ public:
             srand(time(0));
             int AC_type = rand() % 2;
 
-            // spawn in a random aircraft type of either Bomber of FighterJet
+            // spawn in a random aircraft type of either Bomber or FighterJet
             if (AC_type == 0)
             {
-                Bomber* B = new Bomber(); // spawn a Bomber object and get the pointer
-                current_AC = B;
+                Bomber B; // spawn a Bomber object and get the pointer
+                current_AC = &B;
+
+                while (!Aircraft::isDefeated(current_AC))
+                {
+                    M.playerShot(x, y);
+                    current_AC->move();
+                    for (int i = 0; i < current_AC->location.size(); i++)
+                    {
+                        if (current_AC->location[i].first == x && current_AC->location[i].second == y)
+                        {
+                            current_AC->labels[i] = 'X';
+                        }
+                    }
+                    // need to update the game board here
+                    
+                    // add a check for if the AC gets to the goal
+                    if (current_AC->location[0].second == 15)
+                    {
+                        hitCounter = hitCounter + 1;
+                        break;
+                    }
+
+                    else if (Aircraft::isDefeated(current_AC))
+                    {
+                        M.Score(5);
+                        break;
+                    }
+                }
+
             }
 
             else
             {
-                FighterJet* F = new FighterJet(); // spawn a FighterJet object and get the pointer
-                current_AC = F;
-            }
+                FighterJet F; // spawn a FighterJet object and get the pointer
+                current_AC = &F;
 
-            while (!Aircraft::isDefeated(current_AC))
-            {
-                M.playerShot(x, y);
-                current_AC->move();
-                for (int i = 0; i < current_AC->location.size(); i++)
+                while (!Aircraft::isDefeated(current_AC))
                 {
-                    if (current_AC->location[i].first == x && current_AC->location[i].second == y)
+                    M.playerShot(x, y);
+                    current_AC->move();
+                    for (int i = 0; i < current_AC->location.size(); i++)
                     {
-                        current_AC->labels[i] = 'X';
+                        if (current_AC->location[i].first == x && current_AC->location[i].second == y)
+                        {
+                            current_AC->labels[i] = 'X';
+                        }
+                    }
+
+                    // check if aircraft has reached the goal
+                    if (current_AC->location[0].second == 15)
+                    {
+                       hitCounter = hitCounter + 1;
+                        break;
+                    }
+
+                    // check of the aircraft is defeated
+                    else if (Aircraft::isDefeated(current_AC))
+                    {
+                        M.Score(10);
+                        break;
                     }
                 }
             }
-            
-            
-
-        }
-
-        
+        } 
     }
 
     void playerShot(int& x, int& y) 
@@ -157,8 +196,9 @@ public:
 	// this function determines whether the game has ended or not
 	bool isOver(int Counter)
 	{
-        if (Counter == 5)
+        if (Counter == 2)
         {
+            cout << "FINAL SCORE: " << this->score;
             return true;
         }
         else
@@ -168,14 +208,9 @@ public:
 	}
 
     // this function adds up the score and prints the total score if the game has ended
-    void Score(int points, int hitCounter)
+    void Score(int points)
     {
         this->score = this->score + points;
-
-        if (isOver(hitCounter))
-        {
-            cout << "FINAL SCORE: " << this->score;
-        }
     }
 
 private:
