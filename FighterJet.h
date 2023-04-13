@@ -46,7 +46,7 @@ public:
 		}
 
 		// move the fighter down one space if it will remain in bounds
-		else if (newRow == 1 && location[0].first != 0)
+		else if (newRow == 1 && location[0].first != 6)
 		{
 			for (int i = 0; i < 2; i++)
 			{
@@ -54,7 +54,7 @@ public:
 			}
 		}
 
-		// always move the fighter to the right 3 spaces
+		// always move the fighter to the right 2 spaces
 		for (int i = 0; i < 2; i++)
 		{
 			location[i].second = location[i].second + 2;

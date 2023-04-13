@@ -44,7 +44,7 @@ public:
 		int newRow = Aircraft::getRandomNumber(0,1);
 
 		// move the bomber up one space if it will remain in bounds
-		if (newRow == 0 && location[0].first-1 != 0)
+		if (newRow == 0 && location[0].first != 1)
 		{
 			for (int i = 0; i < 6; i++)
 			{
@@ -53,7 +53,7 @@ public:
 		}
 
 		// move the bomber down one space if it will remain in bounds
-		else if (newRow == 1 && location[0].first+1 != 0)
+		else if (newRow == 1 && location[0].first != 5)
 		{
 			for (int i = 0; i < 6; i++)
 			{
@@ -61,10 +61,10 @@ public:
 			}
 		}
 
-		// always move the bomber to the right 2 spaces
+		// always move the bomber to the right 1 space
 		for (int i = 0; i < 6; i++)
 		{
-			location[i].second = location[i].second + 2;
+			location[i].second = location[i].second + 1;
 		}
 	}
 

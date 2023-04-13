@@ -79,6 +79,7 @@ public:
 
 	}
 
+
     // this function runs the game
     static void runGame()
     {
@@ -94,7 +95,6 @@ public:
 
         while (!M.isOver(hitCounter))
         {
-            board.print_board();
 
             int AC_type = Aircraft::getRandomNumber(0, 1);
 
@@ -104,10 +104,15 @@ public:
                 Bomber B; // spawn a Bomber object and get the pointer
                 current_AC = &B;
 
+                board.update_board(current_AC);
+                board.print_board();
+
+                
                 while (!Aircraft::isDefeated(current_AC))
                 {
-                    M.playerShot(x, y);
                     current_AC->move();
+                    M.playerShot(x, y);
+
                     for (int i = 0; i < current_AC->location.size(); i++)
                     {
                         if (current_AC->location[i].first == x && current_AC->location[i].second == y)
@@ -115,22 +120,27 @@ public:
                             current_AC->labels[i] = 'X';
                         }
                     }
-                    
+
+
                     // update the board and print it
                     board.reset_board();
                     board.update_board(current_AC);
                     board.print_board();
 
-                    // add a check for if the AC gets to the goal
+                    // check if aircraft has reached the goal
                     if (current_AC->location[0].second == 15)
                     {
+                        board.reset_board();
                         hitCounter = hitCounter + 1;
                         break;
                     }
 
+                    // check of the aircraft is defeated
                     else if (Aircraft::isDefeated(current_AC))
                     {
+                        cout << "Bomber defeated!\n+ 5 points\n\n" << endl;
                         M.Score(5);
+                        board.reset_board();
                         break;
                     }
                 }
@@ -142,10 +152,14 @@ public:
                 FighterJet F; // spawn a FighterJet object and get the pointer
                 current_AC = &F;
 
+                board.update_board(current_AC);
+                board.print_board();
+
                 while (!Aircraft::isDefeated(current_AC))
                 {
-                    M.playerShot(x, y);
                     current_AC->move();
+                    M.playerShot(x, y);
+                                                                            
                     for (int i = 0; i < current_AC->location.size(); i++)
                     {
                         if (current_AC->location[i].first == x && current_AC->location[i].second == y)
@@ -154,6 +168,7 @@ public:
                         }
                     }
 
+                    
                     // update the board and print it
                     board.reset_board();
                     board.update_board(current_AC);
@@ -162,20 +177,24 @@ public:
                     // check if aircraft has reached the goal
                     if (current_AC->location[0].second == 15)
                     {
+                       board.reset_board();
                        hitCounter = hitCounter + 1;
-                        break;
+                       break;
                     }
 
                     // check of the aircraft is defeated
                     else if (Aircraft::isDefeated(current_AC))
                     {
+                        cout << "Fighter defeated!\n+ 10 points\n\n" << endl;
                         M.Score(10);
+                        board.reset_board();
                         break;
                     }
                 }
             }
         } 
     }
+
 
     // this function takes the player's input and checks if it is valid
     void playerShot(int& x, int& y) 
@@ -188,16 +207,16 @@ public:
             cin >> input;
             if (input.length() == 2 && isalpha(tolower(input[0])) && isdigit(input[1])) 
             {
-                x = tolower(input[0]) - 'a'; // convert letter to corresponding index (0-15)
-                y = input[1] - '1'; // convert number to corresponding index (0-8)
-                if (x >= 0 && x < 16 && y >= 0 && y < 7) 
+                y = tolower(input[0]) - 'a'; // convert letter to corresponding index (0-15)
+                x = input[1] - '1'; // convert number to corresponding index (0-6)
+                if (y >= 0 && y < 16 && x >= 0 && x < 7) 
                 {
                     validInput = true;
                 }
             }
             if (!validInput) 
             {
-                cout << "Invalid input. Please enter a valid coordinate within the 16x9 grid." << endl;
+                cout << "Invalid input. Please enter a valid coordinate within the 16x7 grid." << endl;
             }
         }
     }
@@ -206,9 +225,9 @@ public:
 	// this function determines whether the game has ended or not
 	bool isOver(int Counter)
 	{
-        if (Counter == 5)
+        if (Counter == 2)
         {
-            cout << "FINAL SCORE: " << this->score;
+            cout << "FINAL SCORE: " << this->score << endl;;
             return true;
         }
         else

@@ -12,7 +12,7 @@ using namespace std;
 
 int main()
 {
-	GameManager::start();	// starts the game
+	GameManager::start();	// start
 	GameManager::runGame();	// runs the game
 	
 	return 0;
