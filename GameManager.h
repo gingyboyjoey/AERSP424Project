@@ -2,13 +2,13 @@
  
 #include <iostream>
 #include <cstdio>
+#include <vector>
+#include <random>
+#include <string>
 #include "GameBoard.h" 
 #include "Aircraft.h"
 #include "Bomber.h"
 #include "FighterJet.h"
-#include <cstdlib>
-#include <time.h>
-#include <string>
 
 using namespace std;
 
@@ -90,14 +90,13 @@ public:
         Aircraft* current_AC;
 
         int hitCounter = 0; // holds the number of aircraft that have reached the base
-        int x, y; // intitialize player shot coordinates
+        int x = 0, y = 0; // intitialize player shot coordinates
 
         while (!M.isOver(hitCounter))
         {
             board.print_board();
 
-            srand(time(0));
-            int AC_type = rand() % 2;
+            int AC_type = Aircraft::getRandomNumber(0, 1);
 
             // spawn in a random aircraft type of either Bomber or FighterJet
             if (AC_type == 0)
@@ -116,8 +115,12 @@ public:
                             current_AC->labels[i] = 'X';
                         }
                     }
-                    // need to update the game board here
                     
+                    // update the board and print it
+                    board.reset_board();
+                    board.update_board(current_AC);
+                    board.print_board();
+
                     // add a check for if the AC gets to the goal
                     if (current_AC->location[0].second == 15)
                     {
@@ -151,6 +154,11 @@ public:
                         }
                     }
 
+                    // update the board and print it
+                    board.reset_board();
+                    board.update_board(current_AC);
+                    board.print_board();
+
                     // check if aircraft has reached the goal
                     if (current_AC->location[0].second == 15)
                     {
@@ -169,6 +177,7 @@ public:
         } 
     }
 
+    // this function takes the player's input and checks if it is valid
     void playerShot(int& x, int& y) 
     {
         string input;
@@ -193,10 +202,11 @@ public:
         }
     }
 
+
 	// this function determines whether the game has ended or not
 	bool isOver(int Counter)
 	{
-        if (Counter == 2)
+        if (Counter == 5)
         {
             cout << "FINAL SCORE: " << this->score;
             return true;
@@ -207,11 +217,13 @@ public:
         }
 	}
 
+
     // this function adds up the score and prints the total score if the game has ended
     void Score(int points)
     {
         this->score = this->score + points;
     }
+
 
 private:
     int score = 0;

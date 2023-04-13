@@ -7,9 +7,6 @@ Group Members: Darrian Petrakis, Joeseph Peters, and Jordon Zakarevicz
 
 #include <iostream>
 #include "GameManager.h"
-#include "Bomber.h"
-
-#include<vector>
 
 using namespace std;
 

@@ -1,8 +1,10 @@
 #pragma once
 
-#include <cstdlib>
-#include <time.h>
+#include <vector>
 #include "Aircraft.h"
+#include "GameManager.h"
+
+using namespace std;
 
 // This class defines a fighter jet that is inherited from the Aircraft class
 class FighterJet : public Aircraft
@@ -11,9 +13,12 @@ public:
 	// constructor and deconstructor here
 	FighterJet()
 	{
-		srand(time(0));
-		startrow = rand() % 7; // random starting row
+		startrow = Aircraft::getRandomNumber(0, 6); // random starting row
 		startcol = 1;
+
+		// sizes the location vector of pairs and labels vector
+		location.resize(2);
+		labels.resize(2);
 
 		// set the starting location of the bomber
 		location[0] = make_pair(startrow, startcol);
@@ -29,13 +34,12 @@ public:
 	// this function moves the fighter jet aircraft. Movement is two to three spaces forward and left or right one space
 	virtual void move() override
 	{
-		srand(time(0));
-		int newRow = rand() % 2;
+		int newRow = Aircraft::getRandomNumber(0,1);
 
 		// move the fighter up one space if it will remain in bounds
 		if (newRow == 0 && location[0].first != 0)
 		{
-			for (int i = 0; i < 6; i++)
+			for (int i = 0; i < 2; i++)
 			{
 				location[i].first = location[i].first - 1;
 			}
@@ -44,14 +48,14 @@ public:
 		// move the fighter down one space if it will remain in bounds
 		else if (newRow == 1 && location[0].first != 0)
 		{
-			for (int i = 0; i < 6; i++)
+			for (int i = 0; i < 2; i++)
 			{
 				location[i].first = location[i].first + 1;
 			}
 		}
 
 		// always move the fighter to the right 3 spaces
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < 2; i++)
 		{
 			location[i].second = location[i].second + 2;
 		}

@@ -1,8 +1,10 @@
 #pragma once
 
 #include <iostream>
+#include "Aircraft.h"
 
 using namespace std;
+
 // This class defines the game board that will be played on
 class GameBoard
 {
@@ -68,19 +70,35 @@ public:
 		cout << "\n\n" << endl;
 	}
 
+	// this function resets the board 
+	void reset_board()
+	{
+		for (int i = 0; i < 7; i++)
+		{
+			for (int j = 0; j < 16; j++)
+			{
+				// Set the value of each element
+				this->Board[i][j] = ' ';
+			}
+		}
+	}
+
 	// this function updates the game board grid
-	void updateAndPrintBoard(int x, int y) {
-		if (this->Board[y][x] == ' ') {
-			this->Board[y][x] = 'X';
-			std::cout << "Hit!" << std::endl;
+	void update_board(Aircraft* a)
+	{
+		for (int k = 0; k < a->location.size(); k++)
+		{
+			for (int i = 0; i < 7; i++)
+			{
+				for (int j = 0; j < 16; j++)
+				{
+					if (a->location[k].first == i && a->location[k].second == j)
+					{
+						this->Board[i][j] = a->labels[k];
+					}
+				}
+			}
 		}
-		else if (this->Board[y][x] == 'X') {
-			std::cout << "Already hit that spot!" << std::endl;
-		}
-		else {
-			std::cout << "Miss!" << std::endl;
-		}
-		print_board();
 	}
 
 private:

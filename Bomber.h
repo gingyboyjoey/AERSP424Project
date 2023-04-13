@@ -1,10 +1,11 @@
 #pragma once
 
-#include <array>
 #include <vector>
-#include <cstdlib>
-#include <time.h>
+#include <random>
 #include "Aircraft.h"
+#include "GameManager.h"
+
+using namespace std;
 
 // This class defines a bomber that is inherited from the Aircraft class
 class Bomber : public Aircraft
@@ -13,9 +14,12 @@ public:
 	// constructor and deconstructor here
 	Bomber()
 	{
-		srand(time(0));
-		startrow = rand() % 5 + 1; // random starting row from 1 to 5
+		startrow = Aircraft::getRandomNumber(1, 5); // random starting row from 1 to 5
 		startcol = 3;
+
+		// sizes the location vector of pairs and labels vector
+		location.resize(6);
+		labels.resize(6);
 
 		// set the starting location of the bomber
 		location[0] = make_pair(startrow, startcol);
@@ -37,8 +41,7 @@ public:
 	// this function moves the Bomber aircraft. Movement is always two spaces to the right and one space up or down
 	virtual void move() override
 	{
-		srand(time(0));
-		int newRow = rand() % 2;
+		int newRow = Aircraft::getRandomNumber(0,1);
 
 		// move the bomber up one space if it will remain in bounds
 		if (newRow == 0 && location[0].first-1 != 0)
