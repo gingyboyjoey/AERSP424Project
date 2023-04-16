@@ -16,7 +16,7 @@ public:
 		{
 			for (int j = 0; j < 16; j++)
 			{
-				// Set the value of each element
+				// Set the value of each element to ' '
 				this->Board[i][j] = ' ';
 			}
 		}
@@ -27,6 +27,7 @@ public:
 	// this function prints the current game board
 	void print_board()
 	{
+		// defines the column labels 
 		char columnLabels[16] = { 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P' };
 
 		for (int i = 0; i < 8; i++)
@@ -77,7 +78,7 @@ public:
 		{
 			for (int j = 0; j < 16; j++)
 			{
-				// Set the value of each element
+				// Set the value of each element to ' '
 				this->Board[i][j] = ' ';
 			}
 		}
@@ -92,9 +93,10 @@ public:
 			{
 				for (int j = 0; j < 16; j++)
 				{
+					// check if the pair in the location vector of pairs equals the position pair in the board
 					if (a->location[k].first == i && a->location[k].second == j)
 					{
-						this->Board[i][j] = a->labels[k];
+						this->Board[i][j] = a->labels[k]; // change the char at the position in the board to the char in label
 					}
 				}
 			}

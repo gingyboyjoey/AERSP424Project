@@ -14,27 +14,30 @@ public:
 	~Aircraft() {} // deconstructor
 
 
-	// creates a virtual function for movement of the two aircraft types
+	// creates a pure virtual function for movement of the two aircraft types
 	virtual void move() = 0;
 
 
-	// this function checks to see if the Bomber has been defeated
+	// this function checks to see if an aircraft has been defeated
 	static bool isDefeated(Aircraft* a)
 	{
 		int hits = 0;
 		for (int i = 0; i < a->location.size(); i++)
 		{
+			// checks the chars inside of the labels vector 
 			if (a->labels[i] == 'X')
 			{
-				hits = hits + 1;
+				hits = hits + 1; // adds one to hits if the char is 'X'
 			}
 		}
 
+		// fighter jets are defeated in 1 hit
 		if (a->location.size() == 2 && hits == 1)
 		{
 			return true;
 		}
 
+		// bombers are defeated in 3 hits
 		else if (a->location.size() == 6 && hits == 3)
 		{
 			return true;
@@ -61,6 +64,6 @@ public:
 	}
 
 
-	vector<pair<int, int>> location;
-	vector<char> labels;
+	vector<pair<int, int>> location; // holds the position of each aircraft
+	vector<char> labels; // holds the char label for each part of the aircraft
 };

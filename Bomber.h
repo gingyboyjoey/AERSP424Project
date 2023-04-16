@@ -15,7 +15,7 @@ public:
 	Bomber()
 	{
 		startrow = Aircraft::getRandomNumber(1, 5); // random starting row from 1 to 5
-		startcol = 3;
+		startcol = 3; // starting column of the nose is always 3
 
 		// sizes the location vector of pairs and labels vector
 		location.resize(6);
@@ -41,30 +41,30 @@ public:
 	// this function moves the Bomber aircraft. Movement is always two spaces to the right and one space up or down
 	virtual void move() override
 	{
-		int newRow = Aircraft::getRandomNumber(0,1);
+		int newRow = Aircraft::getRandomNumber(0,1);  // random integer that is either 0 or 1
 
-		// move the bomber up one space if it will remain in bounds
+		// move the bomber up one space if newRow equals 0 and the bomber will remain in bounds
 		if (newRow == 0 && location[0].first != 1)
 		{
 			for (int i = 0; i < 6; i++)
 			{
-				location[i].first = location[i].first - 1;
+				location[i].first = location[i].first - 1; // shifts the row of each element in the vector of pairs 
 			}
 		}
 
-		// move the bomber down one space if it will remain in bounds
+		// move the bomber down one space if newRow equals 1 and the bomber will remain in bounds
 		else if (newRow == 1 && location[0].first != 5)
 		{
 			for (int i = 0; i < 6; i++)
 			{
-				location[i].first = location[i].first + 1;
+				location[i].first = location[i].first + 1; // shifts the row of each element in the vector of pairs
 			}
 		}
 
 		// always move the bomber to the right 1 space
 		for (int i = 0; i < 6; i++)
 		{
-			location[i].second = location[i].second + 1;
+			location[i].second = location[i].second + 1; // shifts the column of each element in the vector of pairs
 		}
 	}
 

@@ -23,6 +23,7 @@ public:
 	// this function starts the game
 	static void start()
 	{
+        // print out cover art
         cout << "                              ._\n"
             "                              |* ;\n"
             "            `*-.              |\"\":\n"
@@ -48,6 +49,7 @@ public:
             "    `. `.\n"
             "      `*\n";
 
+        // print out title
         cout << "  ___  ___________  ______  ___  ___________ \n"
             << " / _ \\|_   _| ___ \\ | ___ \\/ _ \\|_   _|  _  \\\n"
             << "/ /_\\ \\ | | | |_/ / | |_/ / /_\\ \\ | | | | | |\n"
@@ -58,12 +60,14 @@ public:
         cout << "\n\nPress enter to start...  ";
         cin.get();
 
+        // clears the terminal window
         #ifdef _WIN32
                 system("cls"); // clear the terminal (Windows)
         #else
                 system("clear"); // clear the terminal (Linux/MacOS)
         #endif
 
+        // game introduction 
         cout << " Welcome to Air Raid. Your mission is to defend the base from enemy aircraft. The enemy has bombers that move \n"
             " slower but take more hits, and fighter jets that move quick but take less hits. If five aircraft reach the base\n "
             "we'll be forced to surrender...\n\n"
@@ -71,6 +75,7 @@ public:
 
         cin.get();
 
+        // clears the terminal window
         #ifdef _WIN32
                 system("cls"); // clear the terminal (Windows)
         #else
@@ -96,80 +101,88 @@ public:
         while (!M.isOver(hitCounter))
         {
 
-            int AC_type = Aircraft::getRandomNumber(0, 1);
+            int AC_type = Aircraft::getRandomNumber(0, 1);  // random integer that is either 0 or 1
 
-            // spawn in a random aircraft type of either Bomber or FighterJet
+            // spawn in a Bomber if AC_type is zero 
             if (AC_type == 0)
             {
                 Bomber B; // spawn a Bomber object and get the pointer
                 current_AC = &B;
 
+                // update the board with the bomber and print it out
                 board.update_board(current_AC);
                 board.print_board();
 
                 
                 while (!Aircraft::isDefeated(current_AC))
                 {
+                    // move the bomber and prompt the player to take a shot
                     current_AC->move();
                     M.playerShot(x, y);
 
+                    // loop through the location vector and determine if the player hit the bomber
                     for (int i = 0; i < current_AC->location.size(); i++)
                     {
                         if (current_AC->location[i].first == x && current_AC->location[i].second == y)
                         {
-                            current_AC->labels[i] = 'X';
+                            current_AC->labels[i] = 'X'; // replace the 'B' char in the vector with 'X'
                         }
                     }
 
 
-                    // update the board and print it
+                    // reset, update, and print the board
                     board.reset_board();
                     board.update_board(current_AC);
                     board.print_board();
 
-                    // check if aircraft has reached the goal
+                    // check if bomber has reached the goal
                     if (current_AC->location[0].second == 15)
                     {
-                        board.reset_board();
-                        hitCounter = hitCounter + 1;
-                        break;
+                        board.reset_board(); // reset the board
+                        hitCounter = hitCounter + 1; // increase the hit counter
+                        break; // break out of the while loop
                     }
 
                     // check of the aircraft is defeated
                     else if (Aircraft::isDefeated(current_AC))
                     {
                         cout << "Bomber defeated!\n+ 5 points\n\n" << endl;
-                        M.Score(5);
-                        board.reset_board();
-                        break;
+                        M.Score(5); // increase the score by 5 points
+                        board.reset_board(); // reset the board
+                        break; // break out of the while loop
                     }
                 }
 
             }
 
+            // spawn in a fighter jet if AC_type is one
             else
             {
                 FighterJet F; // spawn a FighterJet object and get the pointer
                 current_AC = &F;
 
+                // update the board with the bomber and print it out
                 board.update_board(current_AC);
                 board.print_board();
 
+
                 while (!Aircraft::isDefeated(current_AC))
                 {
+                    // move the fighter jet and prompt the player to take a shot
                     current_AC->move();
                     M.playerShot(x, y);
-                                                                            
+                    
+                    // loop through the location vector and determine if the player hit the fighter jet
                     for (int i = 0; i < current_AC->location.size(); i++)
                     {
                         if (current_AC->location[i].first == x && current_AC->location[i].second == y)
                         {
-                            current_AC->labels[i] = 'X';
+                            current_AC->labels[i] = 'X'; // replace the 'F' char in the vector with 'X'
                         }
                     }
 
                     
-                    // update the board and print it
+                    // reset, update, and print the board
                     board.reset_board();
                     board.update_board(current_AC);
                     board.print_board();
@@ -177,18 +190,18 @@ public:
                     // check if aircraft has reached the goal
                     if (current_AC->location[0].second == 15)
                     {
-                       board.reset_board();
-                       hitCounter = hitCounter + 1;
-                       break;
+                        board.reset_board(); // reset the board
+                        hitCounter = hitCounter + 1; // increase the hit counter
+                        break; // break out of the while loop
                     }
 
                     // check of the aircraft is defeated
                     else if (Aircraft::isDefeated(current_AC))
                     {
                         cout << "Fighter defeated!\n+ 10 points\n\n" << endl;
-                        M.Score(10);
-                        board.reset_board();
-                        break;
+                        M.Score(10); // increase the score by 10 points
+                        board.reset_board(); // reset the board
+                        break; // break out of the while loop
                     }
                 }
             }
@@ -225,7 +238,8 @@ public:
 	// this function determines whether the game has ended or not
 	bool isOver(int Counter)
 	{
-        if (Counter == 2)
+        // checks if the hit counter is equal to 5
+        if (Counter == 5)
         {
             cout << "FINAL SCORE: " << this->score << endl;;
             return true;
